@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#182a29">
+<title>RISE — Reconstructing Interactive 3D Scene from a Single Image</title>
+<meta name="description" content="RISE reconstructs interactive 3D scenes from a single image. Explore a bedroom, open its doors and drawer, and see how generative articulation estimation works.">
+<meta property="og:title" content="RISE · Interactive 3D Scene Reconstruction"><meta property="og:description" content="Single-image scene reconstruction with movable parts. SIGGRAPH Asia 2026."><meta property="og:image" content="assets/media/hero.webp">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css?v=22"><link rel="preload" href="assets/fonts/dm-sans-semibold.ttf" as="font" type="font/ttf" crossorigin>
+<script type="module" src="page.js?v=21"></script></head><body>
+<a class="skip" href="#abstract">Skip to abstract</a>
+<header class="hero" id="top">
+ <div class="hero-backdrop" aria-hidden="true">
+   <video id="hero-video" class="hero-film" muted loop playsinline preload="none" poster="assets/media/hero.webp"></video>
+   <div class="hero-shade"></div>
+ </div>
+ <nav class="mast" aria-label="Main navigation">
+ <div class="nav-links" id="nav-links"><a href="#abstract">Abstract</a><a href="#method">Method</a><a href="#interactive">Interactive results</a><a href="#applications">Applications</a><a href="#citation">Citation</a></div>
+ <button class="menu icon-button" aria-label="Open navigation" aria-expanded="false" aria-controls="nav-links"><svg role="presentation" aria-hidden="true" viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18M3 16h18"/></svg></button></nav>
+ <div class="hero-copy">
+ <h1><span class="acronym">RISE</span><span class="title-rest">Reconstructing Interactive 3D Scene<br> from a Single Image</span></h1>
+ <p class="venue">SIGGRAPH Asia 2026</p>
+ <p class="authors"><span class="author-row"><span>Xiaocong Zeng<sup>1</sup></span><i aria-hidden="true">·</i> <span>Zehuan Huang<sup>2</sup></span><i aria-hidden="true">·</i> <span>Yiran Qin<sup>3</sup></span><i aria-hidden="true">·</i> <span>Yihang Jiao<sup>1</sup></span></span> <span class="author-row"><span>Yuzhi Zhang<sup>1</sup></span><i aria-hidden="true">·</i> <span>Guangcong Wang<sup>4</sup></span><i aria-hidden="true">·</i> <span>Dongyang Kuang<sup>1</sup></span><i aria-hidden="true">·</i> <span>Ruimao Zhang<sup>1<span class="author-mark" aria-hidden="true">†</span></sup><span class="sr-only"> (corresponding author)</span></span></span></p>
+ <p class="affiliations"><span><sup>1</sup> Sun Yat-sen University</span><span><sup>2</sup> VAST</span><span><sup>3</sup> The Chinese University of Hong Kong, Shenzhen</span><span><sup>4</sup> Great Bay University</span><span class="author-note"><span class="author-mark" aria-hidden="true">†</span> Corresponding author</span></p>
+ <div class="resource-links" role="group" aria-label="Research resources">
+   <span class="resource pending-resource" role="link" tabindex="0" aria-label="ArXiv" aria-disabled="true" aria-describedby="arxiv-status">ArXiv<span class="resource-tip" id="arxiv-status" role="tooltip" hidden>Coming soon</span></span>
+   <a class="resource primary" href="https://dl.acm.org/doi/10.1145/3829340.3842290" target="_blank" rel="noopener" title="Read RISE in the ACM Digital Library"><svg aria-hidden="true" viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z M14 3v5h4 M9 12h6 M9 16h6"/></svg>Paper</a>
+   <span class="resource pending-resource" role="link" tabindex="0" aria-label="Code" aria-disabled="true" aria-describedby="code-status">Code<span class="resource-tip" id="code-status" role="tooltip" hidden>Coming soon</span></span>
+ </div></div>
+ <div class="hero-foot"><a href="#abstract" class="scroll-link"><svg role="presentation" aria-hidden="true" viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v16m-6-6 6 6 6-6"/></svg> Read abstract</a><button class="film-toggle" aria-label="Pause background video"><svg role="presentation" aria-hidden="true" viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14M16 5v14"/></svg></button></div>
+</header>
+<main>
+<section id="abstract" class="abstract shell section"><h2>Abstract</h2><div class="prose"><p>Interactive 3D scenes serve as the foundational infrastructure for embodied AI, digital twins, and immersive metaverses, providing the essential physical and semantic substrate for realistic agent-environment interaction. While recent advances have made single-image 3D reconstruction increasingly feasible, existing methods still fail to directly reconstruct interactive scenes with part-level articulated structures for fine-grained physical interactions. The primary challenges lie in integrating fine-grained, interactable object modeling with holistic scene layouts, and in recovering detailed interactive properties from limited supervision. To bridge this gap, we introduce the task of Single-Image 3D Interactive Scene Reconstruction, which aims to synthesize physically interactive 3D scenes directly from a single image. By unifying fine-grained object articulation with holistic scene synthesis, this task enables the efficient derivation of simulation-ready environments from real-world observations, representing a pivotal step toward the scalable creation of interactive digital worlds. To solve the task, we propose RISE, a unified framework that extends the coarse-to-fine 3D reconstruction pipeline into an interactive paradigm. The coarse stage reconstructs rough object geometry and scene layout, while the fine stage refines object geometry and appearance. To infer interactive properties, we introduce a Generative Articulation Estimation (GAE) module between the coarse and fine stages. By extracting articulation parameters directly from compact coarse-stage representations, GAE efficiently recovers interactive properties while decoupling joint reasoning from entangled geometry. Furthermore, by reformulating articulation estimation as a 4D generative task, GAE leverages 3D priors to ensure geometric- and motion-aware predictions. To evaluate reconstructed interactive scenes, we further introduce three sets of metrics that comprehensively assess scene reconstruction and interactive property recovery. Experiments on both holistic interactive scene and single articulated object reconstruction demonstrate that our method generates high-quality interactable assets. We further validate that the interactive scenes reconstructed by our framework significantly expand the data scaling capacity for downstream embodied AI applications.</p></div></section>
+<section id="method" class="method shell section ruled"><h2>Method</h2>
+<figure class="method-figure"><a class="figure-link" href="assets/media/method.webp" data-image data-caption="The four stages of RISE" aria-label="Enlarge RISE method diagram"><img src="assets/media/method.webp" alt="RISE pipeline showing coarse geometry and poses, dual-state part voxel generation, joint recovery, mesh refinement and scene assembly" loading="lazy"><span class="expand"><svg role="presentation" aria-hidden="true" viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6m0-6-7 7M10 20H4v-6m0 6 7-7"/></svg></span></a>
+<figcaption>The four stages of the proposed RISE to realize interactive 3D scene reconstruction. Starting from coarse object-level sparse voxels and 6-DoF poses predicted from the coarse stage, our Generative Articulation Estimation (GAE) generates dual-state part-level sparse voxels for articulated objects and recovers articulation attributes. The resulting part-level geometry is refined into textured, fine-grained meshes and assembled into the final interactive scene.</figcaption></figure></section>
+<section class="scene-section section" id="interactive"><div class="shell">
+<h2 id="real-world-results">Interactive results</h2>
+<p class="section-intro">Drag right to open a part, or use the slider.</p>
+<div class="room-picker">
+  <button class="gallery-step previous" type="button" aria-label="Show previous rooms" aria-controls="room-strip" disabled>‹</button>
+  <div id="room-strip" class="scene-tabs room-tabs" role="group" aria-label="Choose a room">
+    <button type="button" data-room="bedroom" data-clip="scene-06" aria-pressed="true">Bedroom</button>
+    <button type="button" data-room="kitchen" aria-pressed="false">Kitchen</button>
+    <button type="button" data-room="study" aria-pressed="false">Study</button>
+    <button type="button" data-room="entryway" aria-pressed="false">Entryway</button>
+    <button type="button" data-room="figure6-2" aria-pressed="false">Home office</button>
+    <button type="button" data-room="figure6-3" aria-pressed="false">Dining room</button>
+    <button type="button" data-room="figure6-7" aria-pressed="false">Living room</button>
+    <button type="button" data-room="scene-05" data-clip="scene-05" aria-pressed="false">Media room</button>
+    <button type="button" data-room="scene-07" data-clip="scene-07" aria-pressed="false">Art studio</button>
+    <button type="button" data-room="figure6-6" aria-pressed="false">Sunroom</button>
+    <button type="button" data-room="scene-09" data-clip="scene-09" aria-pressed="false">Terrace</button>
+    <button type="button" data-room="figure6-1" aria-pressed="false">Bedroom · bin lid</button>
+    <button type="button" data-room="figure6-4" aria-pressed="false">Kitchen · tall cabinet</button>
+    <button type="button" data-room="scene-08" data-clip="scene-08" aria-pressed="false">Kitchen · ovens</button>
+    <button type="button" data-room="figure6-5" aria-pressed="false">Study · bookcase</button>
+    <button type="button" data-room="figure6-9" aria-pressed="false">Entryway · bench</button>
+    <button type="button" data-room="scene-03" data-clip="scene-03" aria-pressed="false">Laundry · front-loader</button>
+    <button type="button" data-room="figure6-8" aria-pressed="false">Laundry · top-loader</button>
+  </div>
+  <button class="gallery-step next" type="button" aria-label="Show more rooms" aria-controls="room-strip">›</button>
+  <div class="compact-rooms"><select id="room-select" aria-label="Choose a room"></select></div>
+</div>
+<div class="explorer">
+  <div class="room-display">
+    <div class="result-heading"><h3 id="result-mode">Interactive reconstruction</h3><button id="room-clip-toggle" type="button" aria-controls="room-clip">Play scene video</button></div>
+    <div id="room-viewers"><rise-viewer data-room="bedroom" data-title="Bedroom"></rise-viewer></div>
+    <video id="room-clip" controls muted playsinline loop preload="none" hidden></video>
+  </div>
+  <figure class="input-panel">
+    <figcaption>Input image</figcaption>
+    <img id="room-input" src="assets/media/bedroom-input.webp" alt="Bedroom input image" loading="lazy">
+  </figure>
+</div>
+</div></section>
+<section class="shell section" id="comparisons"><h2>Comparisons</h2><div class="comparison-grid">
+<article>
+<figure>
+<a class="figure-link compare" data-image data-caption="Fig. 5. Interactive scene reconstruction" href="assets/media/scene-comparison.webp" aria-label="Enlarge scene reconstruction comparison"><img src="assets/media/scene-comparison.webp" loading="lazy" alt="Scene reconstruction comparison from the paper"><span class="expand"><svg role="presentation" aria-hidden="true" viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6m0-6-7 7M10 20H4v-6m0 6 7-7"/></svg></span></a>
+<figcaption><strong>Fig. 5.</strong> Qualitative comparison of interactive scene reconstruction on the evaluation data generated by SceneSmith. Red boxes highlight failure cases, while green boxes indicate successful cases.</figcaption>
+</figure>
+<h3 id="scene-comparison-title">Table 1. Comparison with interactive scene reconstruction baselines.</h3>
+<div class="results-scroll" role="region" tabindex="0" aria-label="Interactive scene reconstruction on SceneSmith"><table aria-labelledby="scene-comparison-title"><thead><tr><th rowspan="2" scope="col">Method</th><th colspan="2" scope="colgroup">Static reconstruction</th><th colspan="4" scope="colgroup">Scene interactability</th><th colspan="3" scope="colgroup">Object usability</th></tr><tr><th scope="col">RS-IoU ↑</th><th scope="col">RS-CD ↓</th><th scope="col">AS-IoU ↑</th><th scope="col">AS-CD ↓</th><th scope="col">AS-CLIP ↑</th><th scope="col">AS-PSNR ↑</th><th scope="col">Use-L ↑</th><th scope="col">Use-M ↑</th><th scope="col">Use-S ↑</th></tr></thead><tbody><tr><th scope="row">SAM 3D</th><td>0.400</td><td>0.106</td><td>0.396</td><td>0.116</td><td><strong>0.941</strong></td><td>24.55</td><td>0</td><td>0</td><td>0</td></tr><tr><th scope="row">DRAWER</th><td>0.411</td><td>0.107</td><td>0.385</td><td>0.116</td><td>0.938</td><td>24.51</td><td>0</td><td>0</td><td>0</td></tr><tr><th scope="row">SAM 3D + Particulate</th><td>0.338</td><td>0.119</td><td>0.293</td><td>0.133</td><td>0.934</td><td>23.99</td><td>0</td><td>0</td><td>0</td></tr><tr><th scope="row">PAct + FoundationPose</th><td>0.103</td><td>0.260</td><td>0.108</td><td>0.269</td><td>0.885</td><td>21.32</td><td>45.45%</td><td>18.18%</td><td>0</td></tr><tr><th scope="row">RISE + FoundationPose</th><td>0.132</td><td>0.339</td><td>0.136</td><td>0.343</td><td>0.893</td><td>24.58</td><td><strong>80%</strong></td><td><strong>70%</strong></td><td><strong>20%</strong></td></tr><tr class="ours"><th scope="row">RISE</th><td><strong>0.416</strong></td><td><strong>0.075</strong></td><td><strong>0.421</strong></td><td><strong>0.084</strong></td><td>0.937</td><td><strong>26.21</strong></td><td><strong>80%</strong></td><td><strong>70%</strong></td><td><strong>20%</strong></td></tr></tbody></table></div>
+</article>
+<article>
+<figure>
+<a class="figure-link compare" data-image data-caption="Fig. 7. Articulated object reconstruction" href="assets/media/object-comparison.webp" aria-label="Enlarge articulated objects comparison"><img src="assets/media/object-comparison.webp" loading="lazy" alt="Articulated objects comparison from the paper"><span class="expand"><svg role="presentation" aria-hidden="true" viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6m0-6-7 7M10 20H4v-6m0 6 7-7"/></svg></span></a>
+<figcaption><strong>Fig. 7.</strong> Qualitative comparison of articulated object reconstruction on the PartNet-Mobility dataset.</figcaption>
+</figure>
+<h3 id="object-comparison-title">Table 2. Comparison with articulated object reconstruction baselines.</h3>
+<div class="results-scroll" role="region" tabindex="0" aria-label="Articulated object reconstruction on 75 PartNet-Mobility test objects"><table aria-labelledby="object-comparison-title"><thead><tr><th rowspan="2" scope="col">Method</th><th colspan="6" scope="colgroup">Geometry</th><th colspan="2" scope="colgroup">Appearance</th></tr><tr><th scope="col">RS-d<sub>gIoU</sub> ↓</th><th scope="col">RS-d<sub>cDist</sub> ↓</th><th scope="col">RS-d<sub>CD</sub> ↓</th><th scope="col">AS-d<sub>IoU</sub> ↓</th><th scope="col">AS-d<sub>cDist</sub> ↓</th><th scope="col">AS-d<sub>CD</sub> ↓</th><th scope="col">O-CLIP ↑</th><th scope="col">O-PSNR ↑</th></tr></thead><tbody><tr><th scope="row">Art-Anything</th><td>1.553</td><td>0.303</td><td>0.239</td><td>1.359</td><td>0.326</td><td>0.273</td><td>0.827</td><td>15.62</td></tr><tr><th scope="row">SINGAPO</th><td>0.593</td><td>0.117</td><td>0.076</td><td>0.638</td><td>0.177</td><td>0.129</td><td>0.872</td><td>14.86</td></tr><tr><th scope="row">DIPO</th><td>0.565</td><td>0.118</td><td>0.076</td><td>0.604</td><td>0.181</td><td>0.127</td><td>0.871</td><td>15.06</td></tr><tr><th scope="row">PhysX-3D</th><td>0.764</td><td>0.281</td><td>0.186</td><td>0.861</td><td>0.377</td><td>0.262</td><td>0.795</td><td>13.44</td></tr><tr><th scope="row">PhysX-Anything</th><td>1.127</td><td>0.400</td><td>0.258</td><td>1.102</td><td>0.490</td><td>0.335</td><td>0.823</td><td>13.43</td></tr><tr><th scope="row">Particulate</th><td>0.828</td><td>0.316</td><td>0.215</td><td>0.888</td><td>0.453</td><td>0.313</td><td>0.825</td><td>14.66</td></tr><tr><th scope="row">PAct</th><td><strong>0.339</strong></td><td><strong>0.053</strong></td><td><strong>0.044</strong></td><td><strong>0.473</strong></td><td>0.135</td><td>0.111</td><td>0.883</td><td>15.28</td></tr><tr class="ours"><th scope="row">RISE</th><td>0.434</td><td>0.068</td><td>0.050</td><td>0.497</td><td><strong>0.120</strong></td><td><strong>0.086</strong></td><td><strong>0.885</strong></td><td><strong>17.42</strong></td></tr></tbody></table></div>
+</article>
+</div></section>
+<section class="shell section ruled" id="applications"><h2>Robotic applications</h2><p class="section-intro">Policies trained with reconstructed door and drawer assets achieved 93% test success. In a separate scene-level experiment, we collected a long-horizon manipulation trajectory.</p>
+<div class="application-grid"><figure><video controls playsinline preload="none" poster="assets/media/door.webp" src="assets/media/door.mp4" aria-label="Opening a door"></video><figcaption><h3>Opening a door</h3><span>Closed-loop policy execution</span></figcaption></figure><figure><video controls playsinline preload="none" poster="assets/media/drawer.webp" src="assets/media/drawer.mp4" aria-label="Opening a drawer"></video><figcaption><h3>Opening a drawer</h3><span>Closed-loop policy execution</span></figcaption></figure><figure><video controls playsinline preload="none" poster="assets/media/trajectory.webp" src="assets/media/trajectory.mp4" aria-label="Placing a ball in the drawer"></video><figcaption><h3>Placing a ball in the drawer</h3><span>Collected scene-level trajectory</span></figcaption></figure></div></section>
+<section id="citation" class="citation" aria-labelledby="citation-title">
+  <div class="shell section">
+  <h2 id="citation-title">Citation</h2>
+  <div class="citation-card">
+    <h3><a href="https://doi.org/10.1145/3829340.3842290">RISE: Reconstructing Interactive 3D Scene from a Single Image</a></h3>
+    <p class="citation-authors">Xiaocong Zeng, Zehuan Huang, Yiran Qin, Yihang Jiao, Yuzhi Zhang, Guangcong Wang, Dongyang Kuang, and Ruimao Zhang.</p>
+    <p class="citation-venue"><cite>SIGGRAPH Asia 2026 Conference Papers</cite>, Article 143.</p>
+    <div class="citation-tools">
+      <button class="copy-button" type="button"><svg role="presentation" aria-hidden="true" viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/></svg><span aria-live="polite">Copy BibTeX</span></button>
+      <details id="citation-source">
+        <summary>BibTeX</summary>
+        <pre><code id="bibtex">@inproceedings{10.1145/3829340.3842290,
+author = {Zeng, Xiaocong and Huang, Zehuan and Qin, Yiran and Jiao, Yihang and Zhang, Yuzhi and Wang, Guangcong and Kuang, Dongyang and Zhang, Ruimao},
+title = {RISE: Reconstructing Interactive 3D Scene from a Single Image},
+year = {2026},
+isbn = {9798400728426},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3829340.3842290},
+doi = {10.1145/3829340.3842290},
+articleno = {143},
+numpages = {11},
+keywords = {Interactive 3D Scene Reconstruction, Articulation Modeling, 3D Generation},
+location = {Kuala Lumpur, Malaysia},
+series = {SA Conference Papers '26}
+}</code></pre>
+      </details>
+    </div>
+  </div>
+  </div>
+</section>
+</main>
+<dialog class="media-dialog" aria-labelledby="dialog-title"><div class="dialog-head"><h3 id="dialog-title"></h3><button class="dialog-close icon-button" aria-label="Close"><svg role="presentation" aria-hidden="true" viewBox="0 0 24 24" class="icon" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 5 14 14M19 5 5 19"/></svg></button></div><div class="dialog-content"></div></dialog>
+</body></html>
