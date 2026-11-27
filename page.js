@@ -217,7 +217,7 @@ new IntersectionObserver(([entry]) => {
 const viewerObserver = new IntersectionObserver(([entry]) => {
   if (!entry.isIntersecting) return;
   viewerObserver.disconnect();
-  import('./viewer.js?v=14').catch(() => {
+  import('./viewer.js?v=24').catch(() => {
     roomViewers.textContent = 'The 3D viewer could not load. Reload the page to try again.';
   });
 }, { rootMargin: '350px' });

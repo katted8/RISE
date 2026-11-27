@@ -144,11 +144,14 @@ class RiseViewer extends HTMLElement {
       contact.rotation.x=-Math.PI/2;contact.position.set(pos.x,Math.max(floor.position.y+.001,box.min.y-.002),pos.z);scene.add(contact);
     }
     const counts={revolute:0,prismatic:0};
-    const definitions=scenes[this.room] || motion.map(joint=>({
-      name:joint.node_name,
-      label:(joint.type==='revolute'?'Hinge ':'Slide ')+(++counts[joint.type]),
-      joint
-    }));
+    // Keep the third dining-room slide static in the interactive presentation.
+    const definitions=scenes[this.room] || motion
+      .filter(joint => this.room !== 'figure6-3' || joint.node_name !== 'obj_4_part_1')
+      .map(joint=>({
+        name:joint.node_name,
+        label:(joint.type==='revolute'?'Hinge ':'Slide ')+(++counts[joint.type]),
+        joint
+      }));
     const parts=definitions.map(({name,label,joint})=>{
       const node=gltf.scene.getObjectByName(name);
       if(!node)throw Error('Missing part '+name);
